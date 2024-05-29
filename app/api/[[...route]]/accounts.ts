@@ -35,7 +35,7 @@ const app = new Hono()
     .post(
         "/",
         clerkMiddleware(),
-        // the zValidator is use to validate the field
+        // the zValidator is use to validate the schema field
         // the insertAccountSchema was brought from the schema
         // the pick was added in case you want to pick out some specific data from the datbase schema
         zValidator("json", insertAccountSchema.pick({
