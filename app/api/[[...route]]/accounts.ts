@@ -1,10 +1,12 @@
 import { Hono } from "hono";
+import { eq } from "drizzle-orm";
+import { createId } from "@paralleldrive/cuid2";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
-import { HTTPException } from "hono/http-exception";
+import { zValidator } from "@hono/zod-validator";
+// import { HTTPException } from "hono/http-exception";
 
 import { db } from "@/db/drizzle";
-import { accounts } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { accounts, insertAccountSchema } from "@/db/schema";
 
 const app = new Hono()
     .get(
@@ -29,6 +31,31 @@ const app = new Hono()
                 .where(eq(accounts.userId, auth.userId));
 
             return c.json({ data })
+        })
+    .post(
+        "/",
+        clerkMiddleware(),
+        // the zValidator is use to validate the field
+        // the insertAccountSchema was brought from the schema
+        // the pick was added in case you want to pick out some specific data from the datbase schema
+        zValidator("json", insertAccountSchema.pick({
+            name: true,
+        })),
+        async (c) => {
+            const auth = getAuth(c);
+            const values = c.req.valid("json");
+
+            if (!auth?.userId) {
+                return c.json({ error: "Unauthorized" }, 401);
+            }
+
+            const [data] = await db.insert(accounts).values({
+                id: createId(),
+                userId: auth.userId,
+                ...values,
+            }).returning();
+
+            return c.json({ data });
         });
 
 export default app;
