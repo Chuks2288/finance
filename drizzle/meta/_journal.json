@@ -15,6 +15,20 @@
       "when": 1716956107454,
       "tag": "0001_illegal_black_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1717200140095,
+      "tag": "0002_narrow_kitty_pryde",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1717281152653,
+      "tag": "0003_worthless_morlun",
+      "breakpoints": true
     }
   ]
 }
