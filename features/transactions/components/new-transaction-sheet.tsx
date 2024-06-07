@@ -21,6 +21,7 @@ import {
 import { insertTransactionSchema } from "@/db/schema";
 
 import { TransactionForm } from "@/features/transactions/components/transaction-form"
+import { TransactionFormSkeleton } from "./skeleton/transaction-form-skeleton";
 
 const formSchema = insertTransactionSchema.omit({
     id: true,
@@ -88,9 +89,7 @@ export const NewTransactionSheet = () => {
                     </SheetDescription>
                 </SheetHeader>
                 {isLoading ? (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <Loader2 className="size-4 text-muted-foreground animate-spin" />
-                    </div>
+                    <TransactionFormSkeleton />
                 ) : (
                     <TransactionForm
                         onSubmit={onSubmit}

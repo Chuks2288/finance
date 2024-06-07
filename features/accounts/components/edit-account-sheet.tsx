@@ -60,7 +60,6 @@ export const EditAccountSheet = () => {
         }
     }
 
-
     const defaultValues = accountQuery.data ? {
         name: accountQuery.data.name
     } : {
@@ -93,7 +92,6 @@ export const EditAccountSheet = () => {
                                 onDelete={onDelete}
                             />
                         </div>}
-
                 </SheetContent>
             </Sheet>
         </>
