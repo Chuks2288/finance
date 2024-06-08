@@ -31,7 +31,7 @@ export const ImportTable = ({
                             <TableHead key={index}>
                                 <TableHeadSelect
                                     columnIndex={index}
-                                    selectColumns={selectedColumns}
+                                    selectedColumns={selectedColumns}
                                     onChange={onTableHeadSelectChange}
                                 />
                             </TableHead>
