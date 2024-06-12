@@ -140,7 +140,8 @@ export const ImportCard = ({
                         headers={headers}
                         body={body}
                         selectedColumns={selectedColumns}
-                        onTableHeadSelectChange={() => { }}
+                        // onTableHeadSelectChange={() => { }}
+                        onTableHeadSelectChange={onTableHeadSelectChange}
                     />
                 </CardContent>
             </Card>

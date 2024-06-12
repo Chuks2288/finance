@@ -29,11 +29,12 @@ export const ImportTable = ({
                     <TableRow>
                         {headers.map((_item, index) => (
                             <TableHead key={index}>
-                                <TableHeadSelect
+                                {/* <TableHeadSelect
                                     columnIndex={index}
                                     selectedColumns={selectedColumns}
                                     onChange={onTableHeadSelectChange}
-                                />
+                                /> */}
+                                {index}
                             </TableHead>
                         ))}
                     </TableRow>
