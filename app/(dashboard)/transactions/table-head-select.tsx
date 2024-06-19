@@ -49,7 +49,7 @@ export const TableHeadSelect = ({
                 {options.map((option, index) => {
                     const disabled = Object.values(selectedColumns)
                         .includes(option) && selectedColumns[`column_${columnIndex}`]
-                        != option;
+                        !== option;
                     return (
                         <SelectItem
                             key={index}
@@ -57,7 +57,7 @@ export const TableHeadSelect = ({
                             disabled={disabled}
                             className="capitalize"
                         >
-                            {options}
+                            {option}
                         </SelectItem>
                     )
                 })}

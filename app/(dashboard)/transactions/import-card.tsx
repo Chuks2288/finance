@@ -13,7 +13,7 @@ import { useState } from "react";
 import { ImportTable } from "./import-table";
 import { convertAmountToMiliunits } from "@/lib/utils";
 
-const dateFormat = "yyy-MM-dd HH:mm:ss";
+const dateFormat = "yyyy-MM-dd HH:mm:ss";
 const outputFormat = "yyyy-MM-dd";
 
 const requiredOptions = [
@@ -89,7 +89,6 @@ export const ImportCard = ({
             }).filter((row) => row.length > 0)
         }
 
-
         const arrayOfData = mappedData.body.map((row) => {
             return row.reduce((acc: any, cell, index) => {
                 const header = mappedData.headers[index];
@@ -101,11 +100,32 @@ export const ImportCard = ({
             }, {});
         });
 
-        const formattedData = arrayOfData.map((item) => ({
-            ...item,
-            amount: convertAmountToMiliunits(parseFloat(item.amount)),
-            date: format(parse(item.date, dateFormat, new Date()), outputFormat),
-        }));
+        // const formattedData = arrayOfData.map((item) => ({
+        //     ...item,
+        //     amount: convertAmountToMiliunits(parseFloat(item.amount)),
+        //     date: format(parse(item.date, dateFormat, new Date()), outputFormat),
+        // }));
+        const formattedData = arrayOfData.map((item) => {
+            let parsedDate: any;
+            try {
+                parsedDate = parse(item.date, dateFormat, new Date());
+                if (isNaN(parsedDate)) {
+                    throw new Error(`Invalid date: ${item.date}`);
+                }
+            } catch (error) {
+                console.error(`Error parsing date for item`);
+                return { ...item, amount: NaN, date: 'Invalid Date' };
+            }
+
+            const formattedDate = format(parsedDate, outputFormat);
+
+            return {
+                ...item,
+                amount: convertAmountToMiliunits(parseFloat(item.amount)),
+                date: formattedDate,
+            };
+        });
+
 
         onSubmit(formattedData);
     }
@@ -140,7 +160,6 @@ export const ImportCard = ({
                         headers={headers}
                         body={body}
                         selectedColumns={selectedColumns}
-                        // onTableHeadSelectChange={() => { }}
                         onTableHeadSelectChange={onTableHeadSelectChange}
                     />
                 </CardContent>
