@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 
 import { PieVariant } from "@/components/pie-variant";
-import { RadarVariant } from "@/components/radar-variant";
+// import { RadarVariant } from "@/components/radar-variant";
 import { RadialVariant } from "@/components/radial-variant";
 
 import {
@@ -26,6 +26,7 @@ import {
     FileSearch,
     Loader2,
 } from "lucide-react";
+import { RadarVariant } from "./radar-variant";
 
 type Props = {
     data?: {
@@ -41,7 +42,6 @@ export const SpendingPie = ({
 
     const onTypeChange = (type: string) => {
         // TODO: Add paywall
-
         setChartType(type);
     }
 
@@ -99,7 +99,6 @@ export const SpendingPie = ({
                 ) : (
                     <>
                         {chartType === "pie" && <PieVariant data={data} />}/
-                        {/* @ts-ignore */}
                         {chartType === "radar" && <RadarVariant data={data} />}
                         {chartType === "radial" && <RadialVariant data={data} />}
                     </>

@@ -19,8 +19,8 @@ const SEED_CATEGORIES = [
 ]
 
 const SEED_ACCOUNTS = [
-    { id: "category_1", name: "Checking", userId: "SEED_USER_ID", plaidId: null },
-    { id: "category_2", name: "Savings", userId: "SEED_USER_ID", plaidId: null },
+    { id: "category_1", name: "Checking", userId: SEED_USER_ID, plaidId: null },
+    { id: "category_2", name: "Savings", userId: SEED_USER_ID, plaidId: null },
 ]
 
 const defaultTo = new Date();
