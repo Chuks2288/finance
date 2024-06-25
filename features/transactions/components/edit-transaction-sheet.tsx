@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 import { useEditTransaction } from "@/features/transactions/api/use-edit-transaction";
 import { useDeleteTransaction } from "@/features/transactions/api/use-delete-transaction";
@@ -40,29 +39,24 @@ export const EditTransactionSheet = () => {
     const [ConfirmDialog, confirm] = useConfirm(
         "Are you sure?",
         "You are about to delete this account",
-    )
+    );
 
     const transactionQuery = useGetTransaction(id);
     const editMutation = useEditTransaction(id);
     const deleteMutation = useDeleteTransaction(id);
 
-
     const categoryQuery = useGetCategories();
     const categoryMutation = useCreateCategory();
-    const onCreateCategory = (name: string) => categoryMutation.mutate({
-        name
-    });
+    const onCreateCategory = (name: string) => categoryMutation.mutate({ name });
 
     const categoryOptions = (categoryQuery.data ?? []).map((category) => ({
         label: category.name,
         value: category.id,
-    }))
+    }));
 
     const accountQuery = useGetAccounts();
     const accountMutation = useCreateAccount();
-    const onCreateAccount = (name: string) => accountMutation.mutate({
-        name
-    });
+    const onCreateAccount = (name: string) => accountMutation.mutate({ name });
 
     const accountOptions = (accountQuery.data ?? []).map((account) => ({
         label: account.name,
@@ -81,13 +75,14 @@ export const EditTransactionSheet = () => {
         categoryQuery.isLoading ||
         accountQuery.isLoading;
 
-    const onSubmit = (values: FormValues) => {
-        editMutation.mutate(values, {
+    const onSubmit = (values: FormValues, id: string) => {
+        editMutation.mutate({ ...values, id, }, {
             onSuccess: () => {
                 onClose();
-            }
-        });
-    }
+            },
+        }
+        );
+    };
 
     const onDelete = async () => {
         const ok = await confirm();
@@ -96,28 +91,30 @@ export const EditTransactionSheet = () => {
             deleteMutation.mutate(undefined, {
                 onSuccess: () => {
                     onClose();
-                }
-            })
+                },
+            });
         }
-    }
+    };
 
-    const defaultValues = transactionQuery.data ? {
-        accountId: transactionQuery.data.accountId,
-        categoryId: transactionQuery.data.categoryId,
-        amount: transactionQuery.data.amount.toString(),
-        date: transactionQuery.data.date
-            ? new Date(transactionQuery.data.date)
-            : new Date(),
-        payee: transactionQuery.data.payee,
-        notes: transactionQuery.data.notes,
-    } : {
-        accountId: "",
-        categoryId: "",
-        amount: "",
-        date: new Date(),
-        payee: "",
-        notes: "",
-    }
+    const defaultValues = transactionQuery.data
+        ? {
+            accountId: transactionQuery.data.accountId,
+            categoryId: transactionQuery.data.categoryId,
+            amount: transactionQuery.data.amount.toString(),
+            date: transactionQuery.data.date
+                ? new Date(transactionQuery.data.date)
+                : new Date(),
+            payee: transactionQuery.data.payee,
+            notes: transactionQuery.data.notes,
+        }
+        : {
+            accountId: "",
+            categoryId: "",
+            amount: "",
+            date: new Date(),
+            payee: "",
+            notes: "",
+        };
 
     return (
         <>
@@ -125,17 +122,14 @@ export const EditTransactionSheet = () => {
             <Sheet open={isOpen} onOpenChange={onClose}>
                 <SheetContent className="space-y-4">
                     <SheetHeader>
-                        <SheetTitle>
-                            Edit Transaction
-                        </SheetTitle>
-                        <SheetDescription>
-                            Edit an existing Transaction.
-                        </SheetDescription>
+                        <SheetTitle>Edit Transaction</SheetTitle>
+                        <SheetDescription>Edit an existing Transaction.</SheetDescription>
                     </SheetHeader>
-                    {isLoading ?
+                    {isLoading ? (
                         <div>
                             <TransactionFormSkeleton />
-                        </div> :
+                        </div>
+                    ) : (
                         <div>
                             <TransactionForm
                                 id={id}
@@ -148,10 +142,10 @@ export const EditTransactionSheet = () => {
                                 accountOptions={accountOptions}
                                 onCreateAccount={onCreateAccount}
                             />
-                        </div>}
+                        </div>
+                    )}
                 </SheetContent>
             </Sheet>
         </>
-    )
-}
-
+    );
+};

@@ -73,14 +73,12 @@ export const AccountFilter = () => {
                     All accounts
                 </SelectItem>
                 {accounts?.map((account: any) => (
-                    <div>
-                        <SelectItem
-                            key={account.id}
-                            value={account.id}
-                        >
-                            {account.name}
-                        </SelectItem>
-                    </div>
+                    <SelectItem
+                        key={account.id}
+                        value={account.id}
+                    >
+                        {account.name}
+                    </SelectItem>
                 ))}
             </SelectContent>
         </Select>

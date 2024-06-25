@@ -41,7 +41,7 @@ type ApiFormValues = z.input<typeof apiSchema>;
 type Props = {
     id?: string;
     defaultValues?: FormValues;
-    onSubmit: (values: ApiFormValues) => void;
+    onSubmit: (values: ApiFormValues, id: string) => void;
     onDelete?: () => void;
     disabled?: boolean;
     accountOptions: { label: string; value: string }[];
@@ -66,14 +66,15 @@ export const TransactionForm = ({
         defaultValues: defaultValues,
     });
 
-    const handleSubmit = (values: FormValues) => {
+    const handleSubmit = (values: FormValues, id: any) => {
         const amount = parseFloat(values.amount);
         const amountInMiliunits = convertAmountToMiliunits(amount);
 
         onSubmit({
             ...values,
+            // id,
             amount: amountInMiliunits,
-        });
+        }, id);
     }
 
     const handleDelete = () => {
