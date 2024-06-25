@@ -52,14 +52,14 @@ const app = new Hono()
                 return await db
                     .select({
                         income: sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN  ${transactions.amount} ELSE 0 END)`.mapWith(Number),
-                        expenses: sql`SUM(CASE WHEN ${transactions.amount} <= 0 THEN  ${transactions.amount} ELSE 0 END)`.mapWith(Number),
+                        expenses: sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN  ${transactions.amount} ELSE 0 END)`.mapWith(Number),
                         remaining: sum(transactions.amount).mapWith(Number),
                     })
                     .from(transactions)
                     .innerJoin(
                         accounts,
                         eq(
-                            transactions.id,
+                            transactions.accountId,
                             accounts.id,
                         )
                     )
@@ -81,8 +81,8 @@ const app = new Hono()
 
             const [lastPeriod] = await fetchFinancialData(
                 auth.userId,
-                startDate,
-                endDate,
+                lastPeriodStart,
+                lastPeriodEnd,
             );
 
             const incomeChange = calculatePercentChange(
@@ -145,9 +145,9 @@ const app = new Hono()
                 })
             }
 
-
             const activeDays = await db
                 .select({
+                    date: transactions.date,
                     income: sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN  ${transactions.amount} ELSE 0 END)`.mapWith(Number),
                     expenses: sql`SUM(CASE WHEN ${transactions.amount} < 0 THEN  ABS(${transactions.amount}) ELSE 0 END)`.mapWith(Number),
                     // remaining: sum(transactions.amount).mapWith(Number),
@@ -156,7 +156,7 @@ const app = new Hono()
                 .innerJoin(
                     accounts,
                     eq(
-                        transactions.id,
+                        transactions.accountId,
                         accounts.id,
                     )
                 )
@@ -174,11 +174,10 @@ const app = new Hono()
                 .orderBy(transactions.date);
 
             const days = fillMissingDays(
-                // @ts-ignore
                 activeDays,
-                lastPeriodStart,
-                lastPeriodEnd,
-            );
+                startDate,
+                endDate,
+            )
 
             return c.json({
                 data: {

@@ -83,7 +83,6 @@ const TransactionsPage = () => {
         })
     }
 
-
     if (variant === VARIANTS.IMPORT) {
         return (
             <>
